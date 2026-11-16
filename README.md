@@ -1,18 +1,29 @@
-# Chatbot com Gemini — demonstração técnica
+# Gemini Nutrition Chatbot
 
-Versão autónoma e **anonimizada do módulo de chatbot** desenvolvido para o projeto AC_Fitness. O objetivo deste repositório é documentar a integração de um **LLM (Google Gemini)** num chatbot web, **sem publicar o restante website** nem dados do negócio.
+An AI-powered nutrition chatbot built with **Google Gemini**, **Node.js**, and **Express**. It answers general questions about nutrition, balanced eating, fitness-related dietary topics, and healthy habits through a simple web interface.
 
-## O que demonstra
+This project demonstrates how to integrate a large language model (LLM) into a web application while keeping API credentials on the server.
 
-- **Google Gemini API** via SDK `@google/genai`, usando `gemini-2.5-flash` por defeito.
-- **Backend Node.js + Express**, com endpoint `POST /chat` e verificação `GET /health`.
-- **System instruction / prompt engineering**, limitando temas e formato das respostas.
-- **Filtro temático básico** por palavras-chave (não é um mecanismo de segurança robusto).
-- **CORS**, **Helmet**, limite de mensagens por minuto, validação básica de input e tratamento de erros.
-- **Frontend HTML/CSS/JavaScript** com histórico local e chamadas `fetch` à API.
-- **Separação frontend/backend**, sem expor a chave Gemini no browser.
+## Features
 
-## Estrutura
+- **AI-generated responses:** uses the Gemini 2.5 Flash model through Google's Generative AI SDK.
+- **Nutrition-focused conversations:** provides general information about food, nutrition, and fitness-related topics.
+- **Custom system instructions:** guides response style and keeps the assistant focused on its intended subject.
+- **Basic input validation and topic filtering:** checks messages before making API requests.
+- **Simple chat interface:** responsive frontend built with HTML, CSS, and vanilla JavaScript.
+- **Server-side API integration:** the Gemini API key is never sent to the browser.
+- **Basic API protections:** CORS, Helmet, and request rate limiting.
+
+## Tech Stack
+
+| Layer | Technologies |
+| --- | --- |
+| Frontend | HTML, CSS, JavaScript |
+| Backend | Node.js, Express |
+| AI model | Google Gemini 2.5 Flash (`@google/genai`) |
+| API protection | Helmet, CORS, express-rate-limit |
+
+## Project Structure
 
 ```text
 backend/
@@ -21,54 +32,88 @@ backend/
   .env.example
 frontend/
   index.html
-  chat.js
   style.css
+  chat.js
 .gitignore
 README.md
 ```
 
-## Executar localmente
+## Getting Started
 
-Requisitos: Node.js 20+ e uma chave da API Gemini válida.
+**Requirements:** Node.js 20+, Python (to serve the frontend), and a Gemini API key.
 
-1. No terminal, entra na pasta `backend` e instala as dependências:
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/AfonsoSilva411/Gemini-Chatbot-Demo.git
+   cd Gemini-Chatbot-Demo
+   ```
+
+2. Install the backend dependencies:
+
    ```bash
    cd backend
    npm install
    ```
-2. Copia `.env.example` para `.env` e substitui `GEMINI_API_KEY` por uma **chave tua nova**. Não publiques o ficheiro `.env`.
-3. Inicia o backend:
+
+3. Copy `.env.example` to a new file named `.env` and set your Gemini API key:
+
+   ```env
+   GEMINI_API_KEY=your_api_key_here
+   GEMINI_MODEL=gemini-2.5-flash
+   ALLOWED_ORIGINS=http://localhost:5500,http://127.0.0.1:5500
+   PORT=3000
+   ```
+
+4. Start the backend:
+
    ```bash
    npm run dev
    ```
-4. Noutro terminal, serve o frontend na porta 5500 a partir da pasta `frontend`:
+
+5. In a second terminal, from the repository root, start the frontend:
+
    ```bash
    cd frontend
    python -m http.server 5500
    ```
-5. Abre `http://localhost:5500`.
 
-Teste opcional: `http://localhost:3000/health` deve devolver `{ "status": "ok" }`.
+6. Open **http://localhost:5500** in your browser.
 
-## Exemplo do fluxo
+## How It Works
 
-1. O utilizador envia uma pergunta no frontend.
-2. O frontend faz `POST /chat` com JSON `{ "message": "..." }`.
-3. O backend valida o tamanho e o tema, e invoca o Gemini com uma instrução de sistema.
-4. A resposta é devolvida em JSON e apresentada no chatbot.
+1. A user submits a question through the chat interface.
+2. The frontend sends the message to `POST /chat` on the Express backend.
+3. The backend validates the message and checks whether it matches the supported topics.
+4. For supported topics, the backend calls Gemini using predefined system instructions.
+5. The generated response is returned to the browser and displayed in the chat.
 
-## Segurança e privacidade
+The frontend stores recent displayed messages in the browser's local storage. This history is **not** sent to Gemini as conversation context.
 
-- Nunca submeter `.env`, chaves de API, credenciais ou dados de clientes.
-- O histórico do frontend é armazenado no `localStorage` do navegador; não introduzas dados pessoais ou de saúde reais nesta demonstração.
-- As mensagens submetidas ao chatbot são processadas pela API Gemini.
-- Este chatbot é um **protótipo**, não um serviço médico, e o filtro por expressões regulares é facilmente contornável.
-- A chave incluída no arquivo original deve ser **revogada/substituída** antes de qualquer publicação deste repositório.
+## API Endpoints
 
-## Âmbito das competências (candidatura)
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `GET` | `/health` | Check whether the backend is running |
+| `POST` | `/chat` | Send a message and receive a chatbot response |
 
-Este projeto comprova **integração de um LLM via API**, **prompt engineering** e **desenvolvimento de API REST**. **Não comprova, por si só,** RAG, execução local de LLMs, recomendação com LLMs ou GitHub Actions/CI-CD.
+Example request:
 
-## Origem
+```json
+{
+  "message": "Quantas calorias tem uma banana?"
+}
+```
 
-Extraído e adaptado do módulo de chatbot de AC_Fitness, preservando o funcionamento técnico essencial e omitindo o restante site, contactos e identidade do negócio.
+The chatbot is configured to respond in European Portuguese.
+
+## Security and Limitations
+
+- Keep your Gemini API key in `backend/.env`, which is excluded from Git by `.gitignore`.
+- Topic filtering is a basic application feature, not a complete guardrail against off-topic responses.
+- The chatbot provides general educational information, **not medical diagnoses or personalized dietary prescriptions**.
+- Running the app with your own API key may consume your Gemini API quota.
+
+## Project Focus
+
+**LLM integration · REST API development · Prompt engineering · Web development**
