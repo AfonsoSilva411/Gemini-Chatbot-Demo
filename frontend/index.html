@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gemini Chatbot · Demonstração</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="intro">
+      <span class="kicker">PORTFÓLIO · LLM INTEGRATION</span>
+      <h1>Chatbot com Google Gemini</h1>
+      <p>Exemplo independente de um assistente virtual para perguntas gerais sobre nutrição. Projeto demonstrativo, sem informações de clientes nem dados do site original.</p>
+      <div class="chips"><span>Gemini API</span><span>Node.js</span><span>Express</span><span>JavaScript</span></div>
+    </section>
+    <section class="chat" aria-label="Chatbot de demonstração">
+      <header class="chat-header"><div class="avatar">✦</div><div><strong>Assistente de demonstração</strong><small>Gemini · temas de nutrição</small></div><span class="online" title="Demonstração"></span></header>
+      <div id="messages" class="messages" aria-live="polite" aria-relevant="additions">
+        <div class="bubble bot">Olá! Posso responder a perguntas gerais sobre nutrição, alimentação e acompanhamento. Em que posso ajudar?</div>
+      </div>
+      <form id="chat-form" class="composer">
+        <input id="message" aria-label="Mensagem" placeholder="Escreve uma pergunta..." maxlength="500" required autocomplete="off" />
+        <button type="submit" id="send">Enviar</button>
+      </form>
+      <p class="disclaimer">Demonstração técnica · Não substitui aconselhamento de um profissional de saúde.</p>
+    </section>
+  </main>
+  <script src="chat.js"></script>
+</body>
+</html>
